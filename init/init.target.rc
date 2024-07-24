@@ -546,14 +546,6 @@ on property:ro.boot.ramdump=enable
 on boot && property:ro.product.system.manufacturer=Android
     setprop debug.sf.set_idle_timer_ms 0
 
-on property:vendor.post_boot.parsed=1
-  # Set default thermal profile
-    write /sys/class/thermal/thermal_message/sconfig 0
-    
-    # Kill WALT CPU input boost
-    write /proc/sys/walt/input_boost/input_boost_freq "0 0 0 0 0 0 0"
-    write /proc/sys/walt/input_boost/input_boost_ms 0
-
 on property:vendor.minetd.low_budget=0
     write /proc/sys/net/core/netdev_budget_usecs "8000"
     write /proc/sys/net/core/dev_weight "64"
@@ -573,10 +565,10 @@ service fan_control_turn_off /vendor/bin/fan_service 0
     user root
     disabled
     oneshot
-    
-   service citsensor-hal-2-0 /odm/bin/hw/vendor.xiaomi.sensor.citsensorservice@2.0-service
+
+service citsensor-hal-2-0 /odm/bin/hw/vendor.xiaomi.sensor.citsensorservice@2.0-service
     class late_start
     user system
     group system input
     override
-    task_profiles ServiceCapacityLow 
+    task_profiles ServiceCapacityLow
